@@ -10,7 +10,7 @@ read_dly(file)
 \item{file}{Path to file.}
 }
 \value{
-A data frame.
+Data frame.
 }
 \description{
 Read a ".dly" file

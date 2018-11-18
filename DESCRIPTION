@@ -9,9 +9,12 @@ Authors@R:
 Description: Tools for working with GHCN climate data. To do.
 License: MIT + file LICENSE
 Imports: 
+    dplyr,
+    lubridate,
     magrittr,
     readr,
-    stringr
+    stringr,
+    tidyr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.0

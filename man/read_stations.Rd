@@ -10,7 +10,7 @@ read_stations(file)
 \item{file}{Path to file.}
 }
 \value{
-A data frame.
+Data frame.
 }
 \description{
 Read ghcnd stations file

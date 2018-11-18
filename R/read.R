@@ -2,7 +2,7 @@
 #'
 #' @param file Path to file.
 #'
-#' @return A data frame.
+#' @return Data frame.
 #' @export
 read_dly <- function(file) {
   names2 <- vector("character", 31 * 4)
@@ -34,7 +34,7 @@ read_dly <- function(file) {
 #'
 #' @param file Path to file.
 #'
-#' @return A data frame.
+#' @return Data frame.
 #' @export
 read_stations <- function(file) {
   col_names <- c(
