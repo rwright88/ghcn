@@ -1,0 +1,17 @@
+Package: ghcn
+Title: Tools for Working with GHCN Climate Data
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Ray",
+           family = "Wright",
+           role = c("aut", "cre"),
+           email = "raywright88@gmail.com")
+Description: Tools for working with GHCN climate data. To do.
+License: MIT + file LICENSE
+Imports: 
+    magrittr,
+    readr,
+    stringr
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.0
