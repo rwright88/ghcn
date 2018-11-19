@@ -19,10 +19,20 @@ Tools for working with Global Historical Climatology Network (GHCN) data.
 
 ## Examples
 
-To do.
+Read all daily data for one station:
 
-```{r example}
-## basic example code
+```{r}
+library(ghcn)
+
+file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/AG000060390.dly"
+dat <- read_dly(file1)
+print(dat, n_extra = 10)
+```
+
+Transform the data into an easier to use format:
+
+```{r}
+clean_dly(dat)
 ```
 
 ## Data source
