@@ -1,6 +1,5 @@
 ^other$
 ^LICENSE\.md$
-^data-raw$
 ^README\.Rmd$
 ^ghcn\.Rproj$
 ^\.Rproj\.user$

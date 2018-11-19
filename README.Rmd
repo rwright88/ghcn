@@ -26,6 +26,7 @@ library(ghcn)
 
 file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/AG000060390.dly"
 dat <- read_dly(file1)
+
 print(dat, n_extra = 10)
 ```
 

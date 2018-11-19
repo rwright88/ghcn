@@ -15,6 +15,7 @@ library(ghcn)
 
 file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/AG000060390.dly"
 dat <- read_dly(file1)
+
 print(dat, n_extra = 10)
 #> # A tibble: 3,512 x 128
 #>    id     year month element value1 mflag1 qflag1 sflag1 value2 mflag2
