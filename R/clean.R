@@ -9,20 +9,33 @@
 #' @return Data frame.
 #' @export
 clean_dly <- function(data) {
-  # for now, only keeping five core elements
   core <- c("PRCP", "SNOW", "SNWD", "TMAX", "TMIN")
+  # id <- year <- month <- day <- date <- element <- value <- NULL
+  #
+  # data <- data %>%
+  #   dplyr::select(id, year, month, element, dplyr::starts_with("value")) %>%
+  #   dplyr::filter(element %in% core) %>%
+  #   tidyr::gather("day", "value", 5:35) %>%
+  #   dplyr::mutate(date = lubridate::make_date(year, month, stringr::str_extract(day, "\\d+"))) %>%
+  #   dplyr::select(id, date, element, value)
+  #
+  # data <- data %>%
+  #   dplyr::filter(!is.na(date)) %>%
+  #   dplyr::mutate(value = make_consistent(value, element)) %>%
+  #   tidyr::spread(element, value) %>%
+  #   dplyr::rename_all(stringr::str_to_lower)
 
   data <- data %>%
-    dplyr::select(id, year, month, element, dplyr::starts_with("value")) %>%
-    dplyr::filter(element %in% core) %>%
-    tidyr::gather("day", "value", 5:35) %>%
-    dplyr::mutate(date = lubridate::make_date(year, month, stringr::str_extract(day, "\\d+"))) %>%
-    dplyr::select(id, date, element, value)
+    dplyr::select(c("id", "year", "month", "element"), dplyr::starts_with("value")) %>%
+    dplyr::filter(.data$element %in% core) %>%
+    tidyr::gather(.data$day, .data$value, 5:35) %>%
+    dplyr::mutate(date = lubridate::make_date(.data$year, .data$month, stringr::str_extract(.data$day, "\\d+"))) %>%
+    dplyr::select(c("id", "date", "element", "value"))
 
   data <- data %>%
-    dplyr::filter(!is.na(date)) %>%
-    dplyr::mutate(value = make_consistent(value, element)) %>%
-    tidyr::spread(element, value) %>%
+    dplyr::filter(!is.na(.data$date)) %>%
+    dplyr::mutate(value = make_consistent(.data$value, .data$element)) %>%
+    tidyr::spread(.data$element, .data$element) %>%
     dplyr::rename_all(stringr::str_to_lower)
 
   data
