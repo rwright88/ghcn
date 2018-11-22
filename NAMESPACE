@@ -2,7 +2,8 @@
 
 export("%>%")
 export(clean_dly)
-export(make_consistent)
+export(clean_vals)
 export(read_dly)
 export(read_stations)
 importFrom(magrittr,"%>%")
+importFrom(rlang,.data)

@@ -7,22 +7,24 @@
 #' @param data Data frame of dly data.
 #'
 #' @return Data frame.
+#' @importFrom rlang .data
 #' @export
 clean_dly <- function(data) {
-  # for now, only keeping five core elements
   core <- c("PRCP", "SNOW", "SNWD", "TMAX", "TMIN")
 
   data <- data %>%
-    dplyr::select(id, year, month, element, dplyr::starts_with("value")) %>%
-    dplyr::filter(element %in% core) %>%
+    dplyr::select(c("id", "year", "month", "element"), dplyr::starts_with("value")) %>%
+    dplyr::filter(.data$element %in% core) %>%
     tidyr::gather("day", "value", 5:35) %>%
-    dplyr::mutate(date = lubridate::make_date(year, month, stringr::str_extract(day, "\\d+"))) %>%
-    dplyr::select(id, date, element, value)
+    dplyr::mutate(date = lubridate::make_date(
+      .data$year, .data$month, stringr::str_extract(.data$day, "\\d+"))
+    ) %>%
+    dplyr::select(c("id", "date", "element", "value"))
 
   data <- data %>%
-    dplyr::filter(!is.na(date)) %>%
-    dplyr::mutate(value = make_consistent(value, element)) %>%
-    tidyr::spread(element, value) %>%
+    dplyr::filter(!is.na(.data$date)) %>%
+    dplyr::mutate(value = clean_vals(.data$value, .data$element)) %>%
+    tidyr::spread(.data$element, .data$value) %>%
     dplyr::rename_all(stringr::str_to_lower)
 
   data
@@ -39,7 +41,7 @@ clean_dly <- function(data) {
 #'
 #' @return Vector of type double.
 #' @export
-make_consistent <- function(x, element) {
+clean_vals <- function(x, element) {
   if (length(x) != length(element)) {
     stop("Unequal vector lengths.")
   }
