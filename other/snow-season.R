@@ -4,10 +4,16 @@ library(tidyverse)
 library(lubridate)
 library(ghcn)
 
-file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/USW00014737.dly"
+source("other/utils.R")
+
+stations <- read_stations("https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt")
+file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/USW00014711.dly"
+# file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/USW00014737.dly"
 
 dat <- read_dly(file1) %>%
-  clean_dly()
+  clean_dly() %>%
+  mutate_at(c("prcp", "snow", "snwd"), mmtoin) %>%
+  mutate_at(c("tmax", "tmin"), ctof)
 
 # snow by season ----------------------------------------------------------
 
@@ -25,7 +31,7 @@ snow <- dat %>%
   group_by(season_start) %>%
   summarise(
     n = sum(snow > 0, na.rm = TRUE),
-    snow = sum(snow, na.rm = TRUE) / 25.4
+    snow = sum(snow, na.rm = TRUE)
   ) %>%
   ungroup()
 
@@ -34,21 +40,20 @@ color <- "#1f77b4"
 snow %>%
   filter(season_start < max(season_start)) %>%
   ggplot(aes(season_start, snow)) +
-  # geom_col(fill = "#1f77b4", alpha = 0.8) +
   geom_point(size = 2, color = color) +
-  geom_smooth(method = "lm", se = FALSE, size = 1.1, color = color) +
+  geom_smooth(method = "lm", se = FALSE, size = 0.5, color = color) +
   scale_y_continuous(limits = c(0, NA)) +
   theme_bw()
 
-# snow per prcp -----------------------------------------------------------
+# other -------------------------------------------------------------------
 
 dat %>%
-  mutate(snow = round(snow / 25.4, 0)) %>%
-  mutate(prcp = prcp / 25.4) %>%
-  group_by(snow) %>%
-  summarise(n = n(), snow_prcp = sum(snow) / sum(prcp)) %>%
-  ungroup() %>%
-  ggplot(aes(snow, snow_prcp)) +
+  filter(year(date) == max(year(date))) %>%
+  select(date, tmax, tmin) %>%
+  gather("type", "temp", tmax, tmin) %>%
+  ggplot(aes(date, temp, color = type)) +
   geom_point() +
-  geom_smooth(se = FALSE) +
+  scale_x_date(date_breaks = "2 months") +
+  scale_y_continuous(breaks = seq(-100, 200, 20)) +
+  scale_color_brewer(type = "qual", palette = "Set1") +
   theme_bw()
