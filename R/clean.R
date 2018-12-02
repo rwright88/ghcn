@@ -5,7 +5,6 @@
 #' consistent across variables.
 #'
 #' @param data Data frame of dly data.
-#'
 #' @return Data frame.
 #' @importFrom rlang .data
 #' @export
@@ -17,7 +16,9 @@ clean_dly <- function(data) {
     dplyr::filter(.data$element %in% core) %>%
     tidyr::gather("day", "value", 5:35) %>%
     dplyr::mutate(date = lubridate::make_date(
-      .data$year, .data$month, stringr::str_extract(.data$day, "\\d+"))
+      year = .data$year,
+      month = .data$month,
+      day = text_extract(.data$day, "\\d+", perl = TRUE))
     ) %>%
     dplyr::select(c("id", "date", "element", "value"))
 
@@ -25,7 +26,7 @@ clean_dly <- function(data) {
     dplyr::filter(!is.na(.data$date)) %>%
     dplyr::mutate(value = clean_vals(.data$value, .data$element)) %>%
     tidyr::spread(.data$element, .data$value) %>%
-    dplyr::rename_all(stringr::str_to_lower)
+    dplyr::rename_all(tolower)
 
   data
 }
@@ -38,7 +39,6 @@ clean_dly <- function(data) {
 #' @param x Vector of values of type integer or double
 #' @param element GHCN element type of size x. For example, "PRCP" is the
 #'   precipitation.
-#'
 #' @return Vector of type double.
 #' @export
 clean_vals <- function(x, element) {

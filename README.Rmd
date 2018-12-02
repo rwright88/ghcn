@@ -19,15 +19,22 @@ Tools for working with Global Historical Climatology Network (GHCN) data.
 
 ## Examples
 
-Read all daily data for one station:
+Find a station based on a matching pattern:
 
 ```{r}
 library(ghcn)
 
-file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/AG000060390.dly"
-dat <- read_dly(file1)
+stations <- find_stations(pattern = "boston")
 
-print(dat, n_extra = 10)
+print(stations[1:6], n = Inf)
+```
+
+Read all daily data for one station, given the station ID:
+
+```{r}
+dat <- read_dly(id = "USW00014739")
+
+print(dat[1:8])
 ```
 
 Transform the data into an easier to use format:

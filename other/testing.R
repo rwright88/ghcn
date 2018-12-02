@@ -7,7 +7,7 @@ dir1 <- "../../data/ghcn/ghcnd_gsn"
 
 # benchmark and size ------------------------------------------------------
 
-n <- 500
+n <- 100
 files <- fs::dir_ls(dir1)
 files <- files[sample(n)]
 
@@ -22,12 +22,14 @@ f2 <- function(files) {
   data
 }
 
-system.time(dly1 <- f1(files))
-system.time(dly2 <- f2(files))
+system.time(dly1 <- f1(files)) / n
+system.time(dly2 <- f2(files)) / n
 
 all.equal(
   arrange(dly1, date),
   arrange(dly2, date)
 )
+
 summary(dly1)
+
 lobstr::obj_size(dly1) / n

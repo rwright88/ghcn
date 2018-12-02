@@ -4,14 +4,14 @@
 \alias{read_dly}
 \title{Read a ".dly" file}
 \usage{
-read_dly(file)
+read_dly(id)
 }
 \arguments{
-\item{file}{Path to file.}
+\item{id}{Station identification code.}
 }
 \value{
 Data frame.
 }
 \description{
-Read a ".dly" file
+Read a ".dly" file, given the station identification code.
 }

@@ -4,10 +4,7 @@
 \alias{read_stations}
 \title{Read ghcnd stations file}
 \usage{
-read_stations(file)
-}
-\arguments{
-\item{file}{Path to file.}
+read_stations()
 }
 \value{
 Data frame.
