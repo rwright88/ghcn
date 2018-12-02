@@ -1,26 +1,31 @@
 #' Read a ".dly" file
 #'
-#' @param file Path to file.
+#' Read a ".dly" file, given the station identification code.
 #'
+#' @param id Station identification code.
 #' @return Data frame.
 #' @export
-read_dly <- function(file) {
-  names2 <- vector("character", 31 * 4)
-  for (day in 1:31) {
-    i <- day * 4 + 1:4 - 4
-    names2[i] <- stringr::str_c(c("value", "mflag", "qflag", "sflag"), day)
+read_dly <- function(id) {
+  file1 <- paste0("https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/", id, ".dly")
+  n_days <- 31
+  vals_flags <- vector("character", n_days * 4)
+
+  for (day in seq_len(n_days)) {
+    i <- day * 4 - 3:0
+    vals_flags[i] <- paste0(c("value", "mflag", "qflag", "sflag"), day)
   }
-  col_names <- c("id", "year", "month", "element", names2)
+
+  col_names <- c("id", "year", "month", "element", vals_flags)
 
   col_positions <- readr::fwf_widths(
-    widths = c(11, 4, 2, 4, rep(c(5, 1, 1, 1), times = 31)),
+    widths = c(11, 4, 2, 4, rep(c(5, 1, 1, 1), times = n_days)),
     col_names = col_names
   )
 
-  col_types <- stringr::str_c("ciic", stringr::str_dup("iccc", 31))
+  col_types <- paste0("ciic", paste0(rep("iccc", n_days), collapse = ""))
 
   data <- readr::read_fwf(
-    file,
+    file1,
     col_positions = col_positions,
     col_types = col_types,
     na = c("", "-9999"),
@@ -32,11 +37,11 @@ read_dly <- function(file) {
 
 #' Read ghcnd stations file
 #'
-#' @param file Path to file.
-#'
 #' @return Data frame.
 #' @export
-read_stations <- function(file) {
+read_stations <- function() {
+  file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
+
   col_names <- c(
     "id",
     "latitude",
@@ -56,7 +61,7 @@ read_stations <- function(file) {
   )
 
   data <- readr::read_fwf(
-    file,
+    file = file1,
     col_positions = col_positions,
     col_types = "cdddccccc"
   )
