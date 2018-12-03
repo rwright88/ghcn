@@ -1,12 +1,25 @@
 #' Read a ".dly" file
 #'
-#' Read a ".dly" file, given the station identification code.
+#' Read a ".dly" file from the NOAA FTP site, given the station identification
+#' code.
 #'
 #' @param id Station identification code.
 #' @return Data frame.
 #' @export
 read_dly <- function(id) {
   file1 <- paste0("https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/", id, ".dly")
+  data <- read_dly_file(file = file1)
+  data
+}
+
+#' Read a ".dly" file
+#'
+#' Read a ".dly" file, given the file path.
+#'
+#' @param file File path of dly file.
+#' @return Data frame.
+#' @export
+read_dly_file <- function(file) {
   n_days <- 31
   vals_flags <- vector("character", n_days * 4)
 
@@ -25,7 +38,7 @@ read_dly <- function(id) {
   col_types <- paste0("ciic", paste0(rep("iccc", n_days), collapse = ""))
 
   data <- readr::read_fwf(
-    file1,
+    file,
     col_positions = col_positions,
     col_types = col_types,
     na = c("", "-9999"),
