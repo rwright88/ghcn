@@ -1,10 +1,11 @@
 # -------------------------------------------------------------------------
 #
-# Script to count package usage in files in R directory.
+# Script to count package usage and dependencies.
 #
 # -------------------------------------------------------------------------
 
 library(tidyverse)
+library(tools)
 library(desc)
 
 dir1 <- "R"
@@ -14,7 +15,6 @@ dir1 <- "R"
 #' Count number of function calls per file per package.
 #'
 #' @param dir Directory of R files.
-#'
 #' @return Data frame.
 count_calls <- function(dir) {
   files <- list.files(dir, "\\.[R]$", full.names = TRUE, ignore.case = TRUE)
@@ -37,6 +37,22 @@ count_calls <- function(dir) {
   n_calls
 }
 
+get_deps_rec <- function() {
+  by_package <- desc::desc_get_deps() %>%
+    filter(type == "Imports") %>%
+    .[["package"]] %>%
+    tools::package_dependencies(recursive = TRUE)
+
+  combined <- sort(unique(flatten_chr(by_package)))
+
+  list(
+    "by_package" = by_package,
+    "combined"   = combined
+  )
+}
+
 # run ---------------------------------------------------------------------
 
 count_calls(dir1)
+
+str(get_deps_rec())
