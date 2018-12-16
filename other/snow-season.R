@@ -6,11 +6,12 @@ library(ghcn)
 
 source("other/utils.R")
 
-stations <- read_stations("https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt")
-file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/USW00014711.dly"
-# file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/USW00014737.dly"
+stations <- read_stations()
 
-dat <- read_dly(file1) %>%
+res <- find_stations("Richmond")
+id <- "USW00013740"
+
+dat <- read_dly(id) %>%
   clean_dly() %>%
   mutate_at(c("prcp", "snow", "snwd"), mmtoin) %>%
   mutate_at(c("tmax", "tmin"), ctof)

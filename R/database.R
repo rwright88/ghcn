@@ -1,7 +1,7 @@
 #' Create database of daily data
 #'
 #' Create database of daily data from a directory of .dly data files. The
-#' data will only include the five core statistics of daily precipitation, snow
+#' data will only include the five core statistics daily precipitation, snow
 #' fall, snow depth, minimum temperature, and maximum temperature.
 #'
 #' @param dir_files Directory containing the .dly data files.

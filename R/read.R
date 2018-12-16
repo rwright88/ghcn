@@ -50,6 +50,8 @@ read_dly_file <- function(file) {
 
 #' Read ghcnd stations file
 #'
+#' Read ghcnd stations file from the NOAA FTP site.
+#'
 #' @return Data frame.
 #' @export
 read_stations <- function() {
