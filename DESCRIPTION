@@ -6,7 +6,8 @@ Authors@R:
            family = "Wright",
            role = c("aut", "cre"),
            email = "raywright88@gmail.com")
-Description: Tools for working with GHCN climate data. To do.
+Description: Tools for working with GHCN climate data. Read and clean daily
+    climate data.
 License: MIT + file LICENSE
 Imports: 
     DBI (>= 1.0.0),
