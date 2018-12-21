@@ -16,7 +16,7 @@ read_dly <- function(id) {
 #'
 #' Read a ".dly" file, given the file path.
 #'
-#' @param file File path of dly file.
+#' @param file File path of ".dly" file.
 #' @return Data frame.
 #' @export
 read_dly_file <- function(file) {

@@ -2,18 +2,20 @@
 % Please edit documentation in R/database.R
 \name{create_database}
 \alias{create_database}
-\title{Create database of daily data}
+\title{Create database of daily data from ".dly" data files}
 \usage{
-create_database(dir_files, file_db, chunk_size = 100)
+create_database(files, file_db, chunk_size = 100)
 }
 \arguments{
-\item{dir_files}{Directory containing the .dly data files.}
+\item{files}{Character vector of ".dly" data file paths.}
 
-\item{file_db}{Path and file name of SQLite database to create.}
+\item{file_db}{File path of new database to write to.}
 
 \item{chunk_size}{Number of files of data to append at a time to database
 table.}
 }
 \description{
-Create database of daily data
+Create database of daily data from a vector of ".dly" data files. The data
+will only include the five core statistics daily precipitation, snow
+fall, snow depth, minimum temperature, and maximum temperature.
 }

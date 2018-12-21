@@ -10,7 +10,7 @@ clean_vals(x, element)
 \item{x}{Vector of values of type integer or double}
 
 \item{element}{GHCN element type of size x. For example, "PRCP" is the
-precipitation.}
+element type for precipitation.}
 }
 \value{
 Vector of type double.

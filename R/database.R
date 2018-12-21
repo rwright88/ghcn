@@ -1,16 +1,16 @@
-#' Create database of daily data from directory of .dly data files
+#' Create database of daily data from directory of ".dly" data files
 #'
-#' Create database of daily data from a directory of .dly data files. The
+#' Create database of daily data from a directory of ".dly" data files. The
 #' data will only include the five core statistics daily precipitation, snow
 #' fall, snow depth, minimum temperature, and maximum temperature.
 #'
-#' @param path Path of directory containing .dly data files.
-#' @param file_db Path of new database to write to.
+#' @param dir Path of directory containing ".dly" data files.
+#' @param file_db File path of new database to write to.
 #' @param chunk_size Number of files of data to append at a time to database
 #'   table.
 #' @export
-create_database_dir <- function(path, file_db, chunk_size = 100) {
-  files <- list.files(dir_files)
+create_database_dir <- function(dir, file_db, chunk_size = 100) {
+  files <- list.files(dir)
   create_database(
     files = files,
     file_db = file_db,
@@ -18,19 +18,19 @@ create_database_dir <- function(path, file_db, chunk_size = 100) {
   )
 }
 
-#' Create database of daily data from .dly data files
+#' Create database of daily data from ".dly" data files
 #'
-#' Create database of daily data from a list of .dly data files. The data will
-#' only include the five core statistics daily precipitation, snow
+#' Create database of daily data from a vector of ".dly" data files. The data
+#' will only include the five core statistics daily precipitation, snow
 #' fall, snow depth, minimum temperature, and maximum temperature.
 #'
-#' @param path Character vector of .dly data file paths.
+#' @param files Character vector of ".dly" data file paths.
 #' @param file_db File path of new database to write to.
 #' @param chunk_size Number of files of data to append at a time to database
 #'   table.
 #' @export
-create_database <- function(path, file_db, chunk_size = 100) {
-  n_files <- length(path)
+create_database <- function(files, file_db, chunk_size = 100) {
+  n_files <- length(files)
   if (n_files == 0) {
     stop("Number of files must be greater than 0.")
   }
@@ -46,7 +46,7 @@ create_database <- function(path, file_db, chunk_size = 100) {
   for (chunk in seq_len(n_chunks)) {
     i_first <- (chunk - 1) * chunk_size + 1
     i_last <- min(i_first + chunk_size - 1, n_files)
-    files_chunk <- path[i_first:i_last]
+    files_chunk <- files[i_first:i_last]
 
     data <- purrr::map_dfr(files_chunk, read_dly_file)
     data <- clean_dly(data)

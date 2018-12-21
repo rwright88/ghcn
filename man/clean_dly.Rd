@@ -7,13 +7,14 @@
 clean_dly(data)
 }
 \arguments{
-\item{data}{Data frame of dly data.}
+\item{data}{Data frame of dly data read with read_dly.}
 }
 \value{
 Data frame.
 }
 \description{
 Transforms dly data so that each row is one day, and each column is a
-variable. Removes flag variables. Also attempts to make units of measurement
-consistent across variables.
+variable. Only includes the five core statistics daily precipitation, snow
+fall, snow depth, minimum temperature, and maximum temperature. Removes flag
+variables. Also makes units of measurement consistent across variables.
 }

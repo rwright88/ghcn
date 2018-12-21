@@ -5,6 +5,7 @@
 # -------------------------------------------------------------------------
 
 library(tidyverse)
+library(RSQLite)
 library(ghcn)
 
 dir_files <- "~/data/ghcn/ghcnd_all/"
@@ -12,37 +13,51 @@ file_db   <- "~/data/ghcn/ghcndb"
 
 # funs --------------------------------------------------------------------
 
-plot_stations_map <- function(stations) {
-  ggplot(stations, aes(longitude, latitude)) +
+plot_stations_wmo <- function() {
+  stations <- read_stations() %>%
+    filter(!is.na(wmo_id))
+
+  stations %>%
+    ggplot(aes(longitude, latitude)) +
     geom_point(size = 0.5, alpha = 0.5) +
     scale_x_continuous(breaks = seq(-200, 200, 40)) +
     scale_y_continuous(breaks = seq(-100, 100, 40)) +
     theme_bw()
 }
 
-# get station ids ---------------------------------------------------------
+get_files_wmo <- function(dir) {
+  wmo_ids <- read_stations() %>%
+    filter(!is.na(wmo_id)) %>%
+    .[["id"]]
 
-stations <- read_stations()
+  files <- list.files(dir, full.names = TRUE)
+  files <- files[str_sub(files, -15, -5) %in% wmo_ids]
+  files
+}
 
-stations_gsn <- filter(stations, !is.na(gsn_flag))
-stations_hcn <- filter(stations, !is.na(hcn_crn_flag))
-stations_wmo <- filter(stations, !is.na(wmo_id))
+query_rand <- function(file_db, n_rows) {
+  con <- dbConnect(SQLite(), file_db)
+  query <- paste0("SELECT * FROM dly_core ORDER BY RANDOM() LIMIT ", n_rows, ";")
+  res <- dbSendQuery(con, query)
+  dat <- dbFetch(res)
+  dbClearResult(res)
+  dbDisconnect(con)
+  dat <- as_tibble(dat)
+  dat
+}
 
-wmo_ids <- stations_wmo[["id"]]
+# run ---------------------------------------------------------------------
 
-plot_stations_map(stations_wmo)
+plot_stations_wmo()
 
-# get file list -----------------------------------------------------------
+files <- get_files_wmo(dir_files)
 
-files <- list.files(dir_files, full.names = TRUE)
-files_wmo <- files[str_sub(files, -15, -5) %in% wmo_ids]
+# system.time(
+#   ghcn::create_database(
+#     files = files,
+#     file_db = file_db,
+#     chunk_size = 100
+#   )
+# )
 
-# create database ---------------------------------------------------------
-
-system.time(
-  create_database(
-    path = dir_files,
-    file_db = file_db,
-    chunk_size = 100
-  )
-)
+query_rand(file_db)
