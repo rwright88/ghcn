@@ -1,20 +1,38 @@
-#' Create database of daily data
+#' Create database of daily data from directory of ".dly" data files
 #'
-#' Create database of daily data from a directory of .dly data files. The
+#' Create database of daily data from a directory of ".dly" data files. The
 #' data will only include the five core statistics daily precipitation, snow
 #' fall, snow depth, minimum temperature, and maximum temperature.
 #'
-#' @param dir_files Directory containing the .dly data files.
-#' @param file_db Path and file name of SQLite database to create.
+#' @param dir Path of directory containing ".dly" data files.
+#' @param file_db File path of new database to write to.
 #' @param chunk_size Number of files of data to append at a time to database
 #'   table.
 #' @export
-create_database <- function(dir_files, file_db, chunk_size = 100) {
-  files <- list.files(dir_files, full.names = TRUE)
-  n_files <- length(files)
+create_database_dir <- function(dir, file_db, chunk_size = 100) {
+  files <- list.files(dir)
+  create_database(
+    files = files,
+    file_db = file_db,
+    chunk_size = chunk_size
+  )
+}
 
+#' Create database of daily data from ".dly" data files
+#'
+#' Create database of daily data from a vector of ".dly" data files. The data
+#' will only include the five core statistics daily precipitation, snow
+#' fall, snow depth, minimum temperature, and maximum temperature.
+#'
+#' @param files Character vector of ".dly" data file paths.
+#' @param file_db File path of new database to write to.
+#' @param chunk_size Number of files of data to append at a time to database
+#'   table.
+#' @export
+create_database <- function(files, file_db, chunk_size = 100) {
+  n_files <- length(files)
   if (n_files == 0) {
-    stop("No files in directory.")
+    stop("Number of files must be greater than 0.")
   }
 
   if (file.exists(file_db)) {

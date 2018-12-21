@@ -7,7 +7,7 @@
 read_dly_file(file)
 }
 \arguments{
-\item{file}{File path of dly file.}
+\item{file}{File path of ".dly" file.}
 }
 \value{
 Data frame.

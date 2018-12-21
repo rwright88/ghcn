@@ -10,5 +10,5 @@ read_stations()
 Data frame.
 }
 \description{
-Read ghcnd stations file
+Read ghcnd stations file from the NOAA FTP site.
 }
