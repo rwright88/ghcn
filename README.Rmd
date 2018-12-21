@@ -6,7 +6,7 @@ output: github_document
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
+  collapse = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
@@ -24,17 +24,17 @@ Find a station based on a matching pattern:
 ```{r}
 library(ghcn)
 
-stations <- find_stations(pattern = "boston")
+stations <- find_stations(pattern = "new york")
 
-print(stations[1:6], n = Inf)
+stations[1:6]
 ```
 
 Read all daily data for one station, given the station ID:
 
 ```{r}
-dat <- read_dly(id = "USW00014739")
+dat <- read_dly(id = "USW00094728")
 
-print(dat[1:8])
+dat[1:8]
 ```
 
 Transform the data into an easier to use format:

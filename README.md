@@ -13,77 +13,75 @@ Find a station based on a matching pattern:
 ``` r
 library(ghcn)
 
-stations <- find_stations(pattern = "boston")
+stations <- find_stations(pattern = "new york")
 
-print(stations[1:6], n = Inf)
-#> # A tibble: 22 x 6
-#>    id          latitude longitude elevation state name                
-#>    <chr>          <dbl>     <dbl>     <dbl> <chr> <chr>               
-#>  1 ASN00064019    -32.3     149.    -1000.  <NA>  BOSTON (GOLLAN)     
-#>  2 CA00111090M     49.9    -121.      200   BC    BOSTON BAR          
-#>  3 CA001110R04     49.9    -121.      163   BC    BOSTON BAR          
-#>  4 CA1ON000066     43.0     -80.3     236.  ON    BOSTON 0.8 SSE      
-#>  5 SF002390970    -29.6      30.1    1540   <NA>  ELANDSHOEK, BOSTON  
-#>  6 US1GATH0005     30.8     -83.8      59.7 GA    BOSTON 3.4 NNW      
-#>  7 US1MASF0001     42.4     -71.1      13.1 MA    BOSTON 0.5 WSW      
-#>  8 US1NHHL0055     42.9     -71.7     170.  NH    NEW BOSTON 2.4 S    
-#>  9 US1NYER0065     42.7     -78.7     476.  NY    BOSTON 1.5 NE       
-#> 10 USC00116080     41.2     -91.1     167   IL    NEW BOSTON DAM 17   
-#> 11 USC00116085     41.2     -91       174   IL    NEW BOSTON          
-#> 12 USC00150874     37.8     -85.7     146   KY    BOSTON 2 SW         
-#> 13 USC00150875     37.7     -85.7     259.  KY    BOSTON 6 SW         
-#> 14 USC00190768     42.4     -71.1       5.2 MA    BOSTON              
-#> 15 USC00198368     42.0     -71.1      25.9 MA    NWS BOSTON/NORTON   
-#> 16 USC00235999     40.0     -92.8     293.  MO    NEW BOSTON 3 NE     
-#> 17 USC00416270     33.5     -94.4     105.  TX    NEW BOSTON          
-#> 18 USC00416271     33.5     -94.5     113.  TX    NEW BOSTON 3 W      
-#> 19 USC00440860     38.5     -78.1     180.  VA    BOSTON 4 SE         
-#> 20 USC00447925     36.7     -78.9     100.  VA    S BOSTON            
-#> 21 USW00014739     42.4     -71.0       3.7 MA    BOSTON LOGAN INTL AP
-#> 22 USW00094701     42.4     -71.1       6.1 MA    BOSTON CITY WSO
+stations[1:6]
 ```
+
+    #> # A tibble: 17 x 6
+    #>    id          latitude longitude elevation state name                    
+    #>    <chr>          <dbl>     <dbl>     <dbl> <chr> <chr>                   
+    #>  1 USC00215902     46.5     -95.4     428.  MN    NEW YORK MILLS          
+    #>  2 USC00305798     40.6     -74.0       6.1 NY    NEW YORK BENSONHURST    
+    #>  3 USC00305799     40.9     -73.9      27.1 NY    NEW YORK BOTANICAL GRD  
+    #>  4 USC00305804     40.7     -73.9       3   NY    NEW YORK LAUREL HILL    
+    #>  5 USC00305806     40.8     -73.9      54.9 NY    NEW YORK UNIV ST        
+    #>  6 USC00305816     40.7     -74.0       3   NY    NEW YORK WB CITY        
+    #>  7 USC00308721     40.9     -72.9       7.9 NY    UPTON COOP - NWSFO NEW ~
+    #>  8 USR0000NGAN     42.1     -77.1     335.  NY    GANG MILLS NEW YORK     
+    #>  9 USR0000NSAR     43.0     -73.7     114.  NY    SARA NEW YORK           
+    #> 10 USR0000NSCH     43.8     -73.7     250.  NY    SCHROON LAKE NEW YORK   
+    #> 11 USR0000NSHR     42.7     -75.5     335.  NY    SHERBURNE NEW YORK      
+    #> 12 USR0000NSTO     41.5     -73.9      61   NY    STONYKILL NEW YORK      
+    #> 13 USW00014732     40.8     -73.9       3.4 NY    NEW YORK LAGUARDIA AP   
+    #> 14 USW00014786     40.6     -73.9       4.9 NY    NEW YORK FLOYD BENNETT ~
+    #> 15 USW00093732     39.8     -72.7      25.9 NY    NEW YORK SHOALS AFS     
+    #> 16 USW00094728     40.8     -74.0      39.6 NY    NEW YORK CNTRL PK TWR   
+    #> 17 USW00094789     40.6     -73.8       3.4 NY    NEW YORK JFK INTL AP
 
 Read all daily data for one station, given the station ID:
 
 ``` r
-dat <- read_dly(id = "USW00014739")
+dat <- read_dly(id = "USW00094728")
 
-print(dat[1:8])
-#> # A tibble: 16,555 x 8
-#>    id           year month element value1 mflag1 qflag1 sflag1
-#>    <chr>       <int> <int> <chr>    <int> <chr>  <chr>  <chr> 
-#>  1 USW00014739  1936     1 TMAX        17 <NA>   <NA>   0     
-#>  2 USW00014739  1936     1 TMIN       -61 <NA>   <NA>   0     
-#>  3 USW00014739  1936     1 PRCP         0 <NA>   <NA>   0     
-#>  4 USW00014739  1936     1 SNOW         0 <NA>   <NA>   0     
-#>  5 USW00014739  1936     1 SNWD         0 <NA>   <NA>   0     
-#>  6 USW00014739  1936     1 WT16        NA <NA>   <NA>   <NA>  
-#>  7 USW00014739  1936     1 WT18        NA <NA>   <NA>   <NA>  
-#>  8 USW00014739  1936     2 TMAX       -50 <NA>   <NA>   0     
-#>  9 USW00014739  1936     2 TMIN      -133 <NA>   <NA>   0     
-#> 10 USW00014739  1936     2 PRCP         0 <NA>   <NA>   0     
-#> # ... with 16,545 more rows
+dat[1:8]
 ```
+
+    #> # A tibble: 14,964 x 8
+    #>    id           year month element value1 mflag1 qflag1 sflag1
+    #>    <chr>       <int> <int> <chr>    <int> <chr>  <chr>  <chr> 
+    #>  1 USW00094728  1869     1 TMAX       -17 <NA>   <NA>   Z     
+    #>  2 USW00094728  1869     1 TMIN       -72 <NA>   <NA>   Z     
+    #>  3 USW00094728  1869     1 PRCP       191 <NA>   <NA>   Z     
+    #>  4 USW00094728  1869     1 SNOW       229 <NA>   <NA>   Z     
+    #>  5 USW00094728  1869     2 TMAX         6 <NA>   <NA>   Z     
+    #>  6 USW00094728  1869     2 TMIN       -39 <NA>   <NA>   Z     
+    #>  7 USW00094728  1869     2 PRCP         0 <NA>   <NA>   Z     
+    #>  8 USW00094728  1869     2 SNOW         0 <NA>   <NA>   Z     
+    #>  9 USW00094728  1869     3 TMAX       -33 <NA>   <NA>   Z     
+    #> 10 USW00094728  1869     3 TMIN      -156 <NA>   <NA>   Z     
+    #> # ... with 14,954 more rows
 
 Transform the data into an easier to use format:
 
 ``` r
 clean_dly(dat)
-#> # A tibble: 30,285 x 7
-#>    id          date        prcp  snow  snwd  tmax  tmin
-#>    <chr>       <date>     <dbl> <dbl> <dbl> <dbl> <dbl>
-#>  1 USW00014739 1936-01-01   0       0     0   1.7  -6.1
-#>  2 USW00014739 1936-01-02   5.3     0     0   1.7  -6.1
-#>  3 USW00014739 1936-01-03  35.3     0     0  12.2   1.7
-#>  4 USW00014739 1936-01-04   0       0     0   7.8   1.7
-#>  5 USW00014739 1936-01-05  22.9     0     0   6.1   0.6
-#>  6 USW00014739 1936-01-06   1.3     0     0   4.4  -0.6
-#>  7 USW00014739 1936-01-07   1.5     3     0   5     0  
-#>  8 USW00014739 1936-01-08   0       0     0   4.4  -2.2
-#>  9 USW00014739 1936-01-09   5.6     0     0   3.9  -1.7
-#> 10 USW00014739 1936-01-10  15.2     0     0   6.7   2.8
-#> # ... with 30,275 more rows
 ```
+
+    #> # A tibble: 54,786 x 7
+    #>    id          date        prcp  snow  snwd  tmax  tmin
+    #>    <chr>       <date>     <dbl> <dbl> <dbl> <dbl> <dbl>
+    #>  1 USW00094728 1869-01-01  19.1   229    NA  -1.7  -7.2
+    #>  2 USW00094728 1869-01-02   0.8     0    NA  -2.8  -6.1
+    #>  3 USW00094728 1869-01-03   0       0    NA   1.7  -2.8
+    #>  4 USW00094728 1869-01-04   4.6     0    NA   2.8   1.1
+    #>  5 USW00094728 1869-01-05   1.3     0    NA   6.1   2.8
+    #>  6 USW00094728 1869-01-06   0       0    NA   3.3   1.1
+    #>  7 USW00094728 1869-01-07   0       0    NA   8.9   1.7
+    #>  8 USW00094728 1869-01-08   0       0    NA  12.2   4.4
+    #>  9 USW00094728 1869-01-09   0       0    NA   8.9   3.3
+    #> 10 USW00094728 1869-01-10   0.3     0    NA   6.7   0.6
+    #> # ... with 54,776 more rows
 
 Data source
 -----------
