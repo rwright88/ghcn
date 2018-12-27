@@ -59,5 +59,3 @@ files <- get_files_wmo(dir_files)
 #     chunk_size = 100
 #   )
 # )
-
-query_rand(file_db)
