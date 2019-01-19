@@ -2,9 +2,9 @@
 
 export("%>%")
 export(clean_dly)
-export(clean_vals)
-export(create_database)
-export(create_database_dir)
+export(clean_dly_vals)
+export(db_read_dly)
+export(db_write_dly)
 export(find_stations)
 export(read_dly)
 export(read_dly_file)

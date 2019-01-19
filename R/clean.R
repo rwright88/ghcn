@@ -25,7 +25,7 @@ clean_dly <- function(data) {
 
   data <- data %>%
     dplyr::filter(!is.na(.data$date)) %>%
-    dplyr::mutate(value = clean_vals(.data$value, .data$element)) %>%
+    dplyr::mutate(value = clean_dly_vals(.data$value, .data$element)) %>%
     tidyr::spread(.data$element, .data$value) %>%
     dplyr::rename_all(tolower)
 
@@ -42,7 +42,7 @@ clean_dly <- function(data) {
 #'   element type for precipitation.
 #' @return Vector of type double.
 #' @export
-clean_vals <- function(x, element) {
+clean_dly_vals <- function(x, element) {
   if (length(x) != length(element)) {
     stop("Unequal vector lengths.")
   }
