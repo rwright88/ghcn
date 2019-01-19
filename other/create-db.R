@@ -1,11 +1,10 @@
 # -------------------------------------------------------------------------
 #
-# Script to create database of all data from selected stations.
+# Script to create database of all historical data from selected stations.
 #
 # -------------------------------------------------------------------------
 
 library(tidyverse)
-library(RSQLite)
 library(ghcn)
 
 dir_files <- "~/data/ghcn/ghcnd_all/"
@@ -35,27 +34,16 @@ get_files_wmo <- function(dir) {
   files
 }
 
-query_rand <- function(file_db, n_rows) {
-  con <- dbConnect(SQLite(), file_db)
-  query <- paste0("SELECT * FROM dly_core ORDER BY RANDOM() LIMIT ", n_rows, ";")
-  res <- dbSendQuery(con, query)
-  dat <- dbFetch(res)
-  dbClearResult(res)
-  dbDisconnect(con)
-  dat <- as_tibble(dat)
-  dat
-}
-
 # run ---------------------------------------------------------------------
 
 plot_stations_wmo()
 
-files <- get_files_wmo(dir_files)
+files_wmo <- get_files_wmo(dir = dir_files)
 
-# system.time(
-#   ghcn::create_database(
-#     files = files,
-#     file_db = file_db,
-#     chunk_size = 100
-#   )
-# )
+system.time(
+  db_write_dly(
+    files = files_wmo,
+    file_db = file_db,
+    chunk_size = 100
+  )
+)
