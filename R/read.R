@@ -7,7 +7,7 @@
 #' @return Data frame.
 #' @export
 read_dly <- function(id) {
-  file1 <- paste0("https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/all/", id, ".dly")
+  file1 <- paste0("ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/", id, ".dly")
   data <- read_dly_file(file = file1)
   data
 }
@@ -55,7 +55,7 @@ read_dly_file <- function(file) {
 #' @return Data frame.
 #' @export
 read_stations <- function() {
-  file1 <- "https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
+  file1 <- "ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
 
   col_names <- c(
     "id",
