@@ -65,7 +65,7 @@ db_read_dly <- function(file_db, ids, vars) {
     stop("vars must be a character vector", call. = FALSE)
   }
 
-  ids <- NULL
+  id <- NULL
 
   con <- DBI::dbConnect(RSQLite::SQLite(), file_db)
 
@@ -74,6 +74,10 @@ db_read_dly <- function(file_db, ids, vars) {
     dplyr::filter(id %in% ids) %>%
     dplyr::select(vars) %>%
     dplyr::collect()
+
+  if ("date" %in% names(data)) {
+    data[["date"]] <- lubridate::as_date(data[["date"]])
+  }
 
   DBI::dbDisconnect(con)
   data
