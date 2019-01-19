@@ -5,7 +5,7 @@
 #' @importFrom rlang .data
 #' @export
 find_stations <- function(pattern) {
-  if (length(pattern != 1)) {
+  if (length(pattern) != 1) {
     stop("Pattern must have length of 1.")
   }
   stations <- read_stations()
