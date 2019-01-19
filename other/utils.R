@@ -1,4 +1,3 @@
-
 ctof <- function(c) {
   c * 1.8 + 32
 }

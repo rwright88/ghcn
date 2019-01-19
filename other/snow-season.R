@@ -10,7 +10,7 @@ library(ghcn)
 
 source("other/utils.R")
 
-id <- "USW00014739"
+id <- "USW00014711"
 
 # funs --------------------------------------------------------------------
 
@@ -27,6 +27,8 @@ get_snow_yearly <- function(data) {
       snow = sum(snow, na.rm = TRUE)
     ) %>%
     ungroup()
+
+  snow
 }
 
 plot_snow <- function(data) {

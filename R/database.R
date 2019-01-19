@@ -1,23 +1,3 @@
-#' Create database of daily data from directory of ".dly" data files
-#'
-#' Create database of daily data from a directory of ".dly" data files. The
-#' data will only include the five core statistics daily precipitation, snow
-#' fall, snow depth, minimum temperature, and maximum temperature.
-#'
-#' @param dir Path of directory containing ".dly" data files.
-#' @param file_db File path of new database to write to.
-#' @param chunk_size Number of files of data to append at a time to database
-#'   table.
-#' @export
-create_database_dir <- function(dir, file_db, chunk_size = 100) {
-  files <- list.files(dir)
-  create_database(
-    files = files,
-    file_db = file_db,
-    chunk_size = chunk_size
-  )
-}
-
 #' Create database of daily data from ".dly" data files
 #'
 #' Create database of daily data from a vector of ".dly" data files. The data
@@ -29,7 +9,7 @@ create_database_dir <- function(dir, file_db, chunk_size = 100) {
 #' @param chunk_size Number of files of data to append at a time to database
 #'   table.
 #' @export
-create_database <- function(files, file_db, chunk_size = 100) {
+db_write_dly <- function(files, file_db, chunk_size = 100) {
   n_files <- length(files)
   if (n_files == 0) {
     stop("Number of files must be greater than 0.")
@@ -68,4 +48,37 @@ create_database <- function(files, file_db, chunk_size = 100) {
 
   DBI::dbExecute(con, statement = "CREATE INDEX idx1 ON dly_core(id)")
   DBI::dbDisconnect(con)
+}
+
+#' Read database dly table.
+#'
+#' @param file_db Path of database file to read.
+#' @param ids Station IDs in data to query (where).
+#' @param vars Variables in data to query (select).
+#' @return Data frame.
+#' @export
+db_read_dly <- function(file_db, ids, vars) {
+  if (!is.character(ids)) {
+    stop("ids must be a character vector", call. = FALSE)
+  }
+  if (!is.character(vars)) {
+    stop("vars must be a character vector", call. = FALSE)
+  }
+
+  id <- NULL
+
+  con <- DBI::dbConnect(RSQLite::SQLite(), file_db)
+
+  data <- con %>%
+    dplyr::tbl("dly_core") %>%
+    dplyr::filter(id %in% ids) %>%
+    dplyr::select(vars) %>%
+    dplyr::collect()
+
+  if ("date" %in% names(data)) {
+    data[["date"]] <- lubridate::as_date(data[["date"]])
+  }
+
+  DBI::dbDisconnect(con)
+  data
 }
