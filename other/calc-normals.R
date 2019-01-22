@@ -79,7 +79,7 @@ month_normal <- function(x, min_years) {
 #' @export
 calc_normals <- function(data, year_min, year_max, min_years_p = 0.5) {
   if (year_max < year_min) {
-    stop("year_max must be greater than or equal to year_min.")
+    stop("year_max must be greater than or equal to year_min.", call. = FALSE)
   }
 
   min_years <- (year_max - year_min + 1) * min_years_p
@@ -111,7 +111,7 @@ calc_normals <- function(data, year_min, year_max, min_years_p = 0.5) {
 
 get_rand_ids <- function(p) {
   if (!(p >= 0 & p <= 1)) {
-    stop("p must be between 0 and 1.")
+    stop("p must be between 0 and 1.", call. = FALSE)
   }
 
   wmo_ids <- read_stations() %>%

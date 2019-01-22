@@ -12,7 +12,7 @@
 db_write_dly <- function(files, file_db, chunk_size = 100) {
   n_files <- length(files)
   if (n_files == 0) {
-    stop("Number of files must be greater than 0.")
+    stop("Number of files must be greater than 0.", call. = FALSE)
   }
 
   if (file.exists(file_db)) {

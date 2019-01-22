@@ -44,7 +44,7 @@ clean_dly <- function(data) {
 #' @export
 clean_dly_vals <- function(x, element) {
   if (length(x) != length(element)) {
-    stop("Unequal vector lengths.")
+    stop("Unequal vector lengths.", call. = FALSE)
   }
   x[element == "PRCP"] <- x[element == "PRCP"] / 10
   x[element == "TMAX"] <- x[element == "TMAX"] / 10
