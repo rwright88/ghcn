@@ -2,7 +2,6 @@
 #'
 #' @param pattern Character string to match station names.
 #' @return Data frame.
-#' @importFrom rlang .data
 #' @export
 find_stations <- function(pattern) {
   if (length(pattern) != 1) {
