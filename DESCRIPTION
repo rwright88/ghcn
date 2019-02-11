@@ -6,21 +6,19 @@ Authors@R:
            family = "Wright",
            role = c("aut", "cre"),
            email = "raywright88@gmail.com")
-Description: Tools for working with GHCN climate data. Read and clean daily
-    climate data.
+Description: Tools for working with GHCN climate data. Read and
+    clean daily climate data.
 License: MIT + file LICENSE
 Imports: 
     DBI (>= 1.0.0),
     dplyr (>= 0.7.7),
     lubridate (>= 1.7.4),
-    magrittr (>= 1.5),
     purrr (>= 0.2.5),
     readr (>= 1.1.1),
-    rlang (>= 0.1.2),
     RSQLite (>= 2.1.1),
     tidyr (>= 0.8.2)
 Suggests: 
-    roxygen2 (>= 6.1.0)
+    roxygen2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1

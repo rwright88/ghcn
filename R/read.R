@@ -3,10 +3,13 @@
 #' Read a ".dly" file from the NOAA FTP site, given the station identification
 #' code.
 #'
-#' @param id Station identification code.
+#' @param id Character vector of a station identification code.
 #' @return Data frame.
 #' @export
 read_dly <- function(id) {
+  if (!is.character(id) | !(length(id) == 1)) {
+    stop("id must be a character vector of length one.", call. = FALSE)
+  }
   file1 <- paste0("ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/", id, ".dly")
   data <- read_dly_file(file = file1)
   data

@@ -7,9 +7,12 @@
 #'
 #' @param data Data frame of dly data read with read_dly.
 #' @return Data frame.
-#' @importFrom rlang .data
 #' @export
 clean_dly <- function(data) {
+  if (!is.data.frame(data)) {
+    stop("data must be a data frame.", call. = FALSE)
+  }
+
   core <- c("PRCP", "SNOW", "SNWD", "TMAX", "TMIN")
 
   data <- data %>%
@@ -44,7 +47,7 @@ clean_dly <- function(data) {
 #' @export
 clean_dly_vals <- function(x, element) {
   if (length(x) != length(element)) {
-    stop("Unequal vector lengths.", call. = FALSE)
+    stop("x and element must have equal lengths.", call. = FALSE)
   }
   x[element == "PRCP"] <- x[element == "PRCP"] / 10
   x[element == "TMAX"] <- x[element == "TMAX"] / 10
