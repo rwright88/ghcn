@@ -16,6 +16,7 @@ get_data <- function(ids) {
   data <- map_dfr(ids, read_dly)
   data <- clean_dly(data)
   data <- data[c("id", "date", "snow")]
+  data$id <- names(ids)[match(data$id, ids)]
   data
 }
 
@@ -69,15 +70,26 @@ plot_cume <- function(data) {
   labels <- c("Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun")
 
   data %>%
-    ggplot(aes(day_num, snow_cume, color = season_start)) +
-    geom_line(size = 1.1) +
+    ggplot(aes(day_num, snow_cume, group = season_start)) +
+    geom_line(size = 0.5, alpha = 0.2) +
+    geom_line(
+      data = filter(data, season_start == "mean"),
+      mapping = aes(day_num, snow_cume),
+      size = 1.1,
+      color = "#E41A1C"
+    ) +
+    geom_line(
+      data = filter(data, season_start == "2018"),
+      mapping = aes(day_num, snow_cume),
+      size = 1.1,
+      color = "#377EB8"
+    ) +
     labs(
       x = "Date",
-      y = "Cumulative snowfall (inches)",
-      color = "Season"
+      y = "Cumulative snowfall (inches)"
     ) +
     scale_x_continuous(breaks = breaks, labels = labels, minor_breaks = NULL) +
-    scale_color_brewer(type = "qual", palette = "Set1") +
+    scale_y_continuous(breaks = seq(0, 1000, 20)) +
     facet_wrap("id") +
     theme_bw()
 }
@@ -85,7 +97,6 @@ plot_cume <- function(data) {
 # run ---------------------------------------------------------------------
 
 dat <- get_data(ids)
-dat$id <- names(ids)[match(dat$id, ids)]
 
 cume_snow <- calc_cume_snow(dat)
 
@@ -94,5 +105,5 @@ cume_mean <- calc_cume_mean(cume_snow, years = 1968:2017)
 cume_snow %>%
   mutate(season_start = as.character(season_start)) %>%
   bind_rows(cume_mean) %>%
-  filter(day_num %in% 93:305, season_start %in% c("mean", "2018")) %>%
+  filter(day_num %in% 93:305, season_start %in% c("mean", as.character(1968:2018))) %>%
   plot_cume()
