@@ -7,7 +7,7 @@
 read_dly(id)
 }
 \arguments{
-\item{id}{Station identification code.}
+\item{id}{Character vector of a station identification code.}
 }
 \value{
 Data frame.
