@@ -5,9 +5,10 @@ library(lubridate)
 library(ghcn)
 
 ids <- c(
-  "Allentown" = "USW00014737",
-  "Boston"    = "USW00014739",
-  "Chicago"   = "USW00094846"
+  "Allentown"    = "USW00014737",
+  "Harrisburg"   = "USW00014711",
+  "Harrisburg2"  = "USW00014751",
+  "Philadelphia" = "USW00013739"
 )
 
 # funs --------------------------------------------------------------------
@@ -97,6 +98,11 @@ plot_cume <- function(data) {
 # run ---------------------------------------------------------------------
 
 dat <- get_data(ids)
+
+# temp fix, 1991 and 1992?
+dat <- dat %>%
+  mutate(id = ifelse(year(date) %in% 1968:1991 & id == "Harrisburg2", "Harrisburg", id)) %>%
+  filter(id != "Harrisburg2")
 
 cume_snow <- calc_cume_snow(dat)
 
