@@ -5,7 +5,7 @@
 #' fall, snow depth, minimum temperature, and maximum temperature. Removes flag
 #' variables. Also makes units of measurement consistent across variables.
 #'
-#' @param data Data frame of dly data read with read_dly.
+#' @param data Data frame of dly data read with `read_dly()`.
 #' @return Data frame.
 #' @export
 clean_dly <- function(data) {

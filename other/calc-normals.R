@@ -21,7 +21,6 @@ year_max  <- 2017
 #' @param min_days_p Minimum rate of days in month that are not NA to calculate
 #'   sum. If rate is less than this, NA will be returned.
 #' @return Vector of length one.
-#' @export
 month_sum <- function(x, min_days_p = 0.5) {
   days_p <- mean(!is.na(x))
 
@@ -38,7 +37,6 @@ month_sum <- function(x, min_days_p = 0.5) {
 #' @param min_days_p Minimum rate of days in month that are not NA to calculate
 #'   mean. If rate is less than this, NA will be returned.
 #' @return Vector of length one.
-#' @export
 month_mean <- function(x, min_days_p = 0.5) {
   days_p <- mean(!is.na(x))
 
@@ -55,7 +53,6 @@ month_mean <- function(x, min_days_p = 0.5) {
 #' @param min_years Minimum number of years required to calculate normal. If
 #'   number of years is less than this, NA will be returned.
 #' @return Vector of length one.
-#' @export
 month_normal <- function(x, min_years) {
   years <- sum(!is.na(x))
 
@@ -76,7 +73,6 @@ month_normal <- function(x, min_years) {
 #' @param min_years_p Minimum rate of years in selected range that are not NA to
 #'   calculate normal for month. If rate is less than this, NA will be returned.
 #' @return Data frame of calculated monthly normals by station.
-#' @export
 calc_normals <- function(data, year_min, year_max, min_years_p = 0.5) {
   if (year_max < year_min) {
     stop("year_max must be greater than or equal to year_min.", call. = FALSE)
