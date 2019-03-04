@@ -7,7 +7,7 @@
 clean_dly(data)
 }
 \arguments{
-\item{data}{Data frame of dly data read with read_dly.}
+\item{data}{Data frame of dly data read with `read_dly()`.}
 }
 \value{
 Data frame.

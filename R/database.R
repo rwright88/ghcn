@@ -28,7 +28,8 @@ db_write_dly <- function(files, file_db, chunk_size = 100) {
     i_last <- min(i_first + chunk_size - 1, n_files)
     files_chunk <- files[i_first:i_last]
 
-    data <- purrr::map_dfr(files_chunk, read_dly_file)
+    data <- lapply(files_chunk, read_dly_file)
+    data <- dplyr::bind_rows(data)
     data <- clean_dly(data)
     vars <- names(data)
     vars_miss <- vars_all[!(vars_all %in% vars)]

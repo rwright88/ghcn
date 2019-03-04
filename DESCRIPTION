@@ -10,13 +10,12 @@ Description: Tools for working with GHCN climate data. Read and
     clean daily climate data.
 License: MIT + file LICENSE
 Imports: 
-    DBI (>= 1.0.0),
-    dplyr (>= 0.7.7),
-    lubridate (>= 1.7.4),
-    purrr (>= 0.2.5),
-    readr (>= 1.1.1),
-    RSQLite (>= 2.1.1),
-    tidyr (>= 0.8.2)
+    DBI,
+    dplyr,
+    lubridate,
+    readr,
+    RSQLite,
+    tidyr
 Suggests: 
     roxygen2
 Encoding: UTF-8
