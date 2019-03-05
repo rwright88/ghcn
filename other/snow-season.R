@@ -44,8 +44,8 @@ plot_snow <- function(data) {
 
 # run ---------------------------------------------------------------------
 
-dat <- read_dly(id) %>%
-  clean_dly()
+dat <- ghcn_read(id) %>%
+  ghcn_clean()
 
 snow_yearly <- get_snow_yearly(dat)
 

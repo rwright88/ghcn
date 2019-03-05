@@ -5,7 +5,7 @@
 #' fall, snow depth, minimum temperature, and maximum temperature. Removes flag
 #' variables. Also makes units of measurement consistent across variables.
 #'
-#' @param data Data frame of dly data read with `ghcn_read_dly()`.
+#' @param data Data frame of dly data read with `ghcn_read()`.
 #' @return Data frame of dly data.
 #' @export
 ghcn_clean <- function(data) {

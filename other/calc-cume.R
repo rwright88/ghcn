@@ -14,8 +14,8 @@ ids <- c(
 # funs --------------------------------------------------------------------
 
 get_data <- function(ids) {
-  data <- map_dfr(ids, read_dly)
-  data <- clean_dly(data)
+  data <- map_dfr(ids, ghcn_read)
+  data <- ghcn_clean(data)
   data <- data[c("id", "date", "snow")]
   data$id <- names(ids)[match(data$id, ids)]
   data

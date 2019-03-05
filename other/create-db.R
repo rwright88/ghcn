@@ -13,7 +13,7 @@ file_db   <- "~/data/ghcn/ghcndb"
 # funs --------------------------------------------------------------------
 
 plot_stations_wmo <- function() {
-  stations <- read_stations() %>%
+  stations <- ghcn_read_stations() %>%
     filter(!is.na(wmo_id))
 
   stations %>%
@@ -25,7 +25,7 @@ plot_stations_wmo <- function() {
 }
 
 get_files_wmo <- function(dir) {
-  wmo_ids <- read_stations() %>%
+  wmo_ids <- ghcn_read_stations() %>%
     filter(!is.na(wmo_id)) %>%
     .[["id"]]
 
@@ -41,7 +41,7 @@ plot_stations_wmo()
 files_wmo <- get_files_wmo(dir = dir_files)
 
 system.time(
-  db_write_dly(
+  ghcn_db_write(
     files = files_wmo,
     file_db = file_db,
     chunk_size = 100

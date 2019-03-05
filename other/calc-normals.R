@@ -110,7 +110,7 @@ get_rand_ids <- function(p) {
     stop("p must be between 0 and 1.", call. = FALSE)
   }
 
-  wmo_ids <- read_stations() %>%
+  wmo_ids <- ghcn_read_stations() %>%
     filter(!is.na(wmo_id)) %>%
     .[["id"]]
 
@@ -125,7 +125,7 @@ get_rand_ids <- function(p) {
 ids <- get_rand_ids(p = 0.01)
 
 system.time({
-  dat <- db_read_dly(file_db, ids = ids, vars = vars_read)
+  dat <- ghcn_db_read(file_db, ids = ids, vars = vars_read)
 })
 
 normals <- calc_normals(dat, year_min = year_min, year_max = year_max)

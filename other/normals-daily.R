@@ -16,8 +16,8 @@ year_max  <- 2010
 # funs --------------------------------------------------------------------
 
 get_data <- function(ids) {
-  data <- map_dfr(ids, read_dly)
-  data <- clean_dly(data)
+  data <- map_dfr(ids, ghcn_read)
+  data <- ghcn_clean(data)
   data$id <- names(ids)[match(data$id, ids)]
   data <- mutate_at(data, c("tmin", "tmax"), ~ .x * 1.8 + 32)
   data
@@ -84,6 +84,5 @@ dat <- get_data(ids)
 normals <- calc_normals(dat, year_min = year_min, year_max = year_max, min_years = 30)
 
 normals[normals[["day_num"]] %in% 54:56, ]
-filter(normals, .data$day_num %in% 54:56)
 
 plot_daily(normals)

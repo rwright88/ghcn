@@ -51,9 +51,9 @@ plot_annually_temps <- function(data) {
 
 # run ---------------------------------------------------------------------
 
-dat <- read_dly(id)
+dat <- ghcn_read(id)
 
-dat <- clean_dly(dat) %>%
+dat <- ghcn_clean(dat) %>%
   mutate_at(c("prcp", "snow", "snwd"), mmtoin) %>%
   mutate_at(c("tmax", "tmin"), ctof)
 

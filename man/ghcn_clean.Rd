@@ -7,7 +7,7 @@
 ghcn_clean(data)
 }
 \arguments{
-\item{data}{Data frame of dly data read with `ghcn_read_dly()`.}
+\item{data}{Data frame of dly data read with `ghcn_read()`.}
 }
 \value{
 Data frame of dly data.
