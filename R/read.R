@@ -3,15 +3,19 @@
 #' Read a ".dly" file from the NOAA FTP site, given the station identification
 #' code.
 #'
-#' @param id Character vector of a station identification code.
-#' @return Data frame.
+#' @param id Station identification code of length one.
+#' @return Data frame of dly data.
 #' @export
-read_dly <- function(id) {
-  if (!is.character(id) | !(length(id) == 1)) {
-    stop("id must be a character vector of length one.", call. = FALSE)
+ghcn_read <- function(id) {
+  if (!(length(id) == 1)) {
+    stop("`id` must have a length of one.", call. = FALSE)
   }
-  file1 <- paste0("ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/", id, ".dly")
-  data <- read_dly_file(file = file1)
+
+  file <- paste0("ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/all/", id, ".dly")
+  data <- tryCatch(
+    ghcn_read_file(file),
+    error = function(e) NA
+  )
   data
 }
 
@@ -19,10 +23,14 @@ read_dly <- function(id) {
 #'
 #' Read a ".dly" file, given the file path.
 #'
-#' @param file File path of ".dly" file.
-#' @return Data frame.
+#' @param file Path to ".dly" data file or connection.
+#' @return Data frame of dly data..
 #' @export
-read_dly_file <- function(file) {
+ghcn_read_file <- function(file) {
+  # if (!file.exists(file)) {
+  #   stop("`file` does not exist.", call. = FALSE)
+  # }
+
   n_days <- 31
   vals_flags <- vector("character", n_days * 4)
 
@@ -55,9 +63,9 @@ read_dly_file <- function(file) {
 #'
 #' Read ghcnd stations file from the NOAA FTP site.
 #'
-#' @return Data frame.
+#' @return Data frame of stations data.
 #' @export
-read_stations <- function() {
+ghcn_read_stations <- function() {
   file1 <- "ftp://ftp.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt"
 
   col_names <- c(

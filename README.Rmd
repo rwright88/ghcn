@@ -24,24 +24,26 @@ Find a station based on a matching pattern:
 ```{r}
 library(ghcn)
 
-stations <- find_stations(pattern = "new york")
-
+stations <- ghcn_find_stations(pattern = "new york")
 stations[1:6]
 ```
 
 Read all daily data for one station, given the station ID:
 
 ```{r}
-dat <- read_dly(id = "USW00094728")
-
+dat <- ghcn_read(id = "USW00094728")
 dat[1:8]
 ```
 
 Transform the data into an easier to use format:
 
 ```{r}
-clean_dly(dat)
+ghcn_clean(dat)
 ```
+
+Create database:
+
+TODO
 
 ## Data source
 

@@ -2,35 +2,45 @@
 #'
 #' Create database of daily data from a vector of ".dly" data files. The data
 #' will only include the five core statistics daily precipitation, snow
-#' fall, snow depth, minimum temperature, and maximum temperature.
+#' fall, snow depth, minimum temperature, and maximum temperature. If the
+#' database already exists, it will be deleted first.
 #'
-#' @param files Character vector of ".dly" data file paths.
-#' @param file_db File path of new database to write to.
-#' @param chunk_size Number of files of data to append at a time to database
-#'   table.
+#' @param files File paths of dly data files
+#' @param file_db File path of database
+#' @param table_name Database table name
+#' @param batch_size Number of data files to write to database table per batch
 #' @export
-db_write_dly <- function(files, file_db, chunk_size = 100) {
+ghcn_db_write <- function(files, file_db, table_name, batch_size = 100) {
   n_files <- length(files)
-  if (n_files == 0) {
-    stop("Number of files must be greater than 0.", call. = FALSE)
+  if (n_files < 1) {
+    stop("Length of `files` must be at least 1.", call. = FALSE)
+  }
+
+  if (!(batch_size %in% 1:n_files)) {
+    stop("`batch_size` must be between 1 and the number of `files`.")
+  }
+
+  files_exist <- all(vapply(files, FUN.VALUE = logical(1), FUN = file.exists))
+  if (files_exist != TRUE) {
+    stop("One or more of the files do not exist.", call. = FALSE)
   }
 
   if (file.exists(file_db)) {
     file.remove(file_db)
   }
-  con <- DBI::dbConnect(RSQLite::SQLite(), file_db)
 
-  n_chunks <- ceiling(n_files / chunk_size)
+  con <- DBI::dbConnect(RSQLite::SQLite(), file_db)
+  n_batches <- ceiling(n_files / batch_size)
   vars_all <- c("id", "date", "prcp", "snow", "snwd", "tmax", "tmin")
 
-  for (chunk in seq_len(n_chunks)) {
-    i_first <- (chunk - 1) * chunk_size + 1
-    i_last <- min(i_first + chunk_size - 1, n_files)
-    files_chunk <- files[i_first:i_last]
+  for (i in seq_len(n_batches)) {
+    first <- (i - 1) * batch_size + 1
+    last <- min(first + batch_size - 1, n_files)
+    files_batch <- files[first:last]
 
-    data <- lapply(files_chunk, read_dly_file)
+    data <- lapply(files_batch, ghcn_read_file)
     data <- dplyr::bind_rows(data)
-    data <- clean_dly(data)
+    data <- ghcn_clean(data)
     vars <- names(data)
     vars_miss <- vars_all[!(vars_all %in% vars)]
 
@@ -40,7 +50,7 @@ db_write_dly <- function(files, file_db, chunk_size = 100) {
 
     DBI::dbWriteTable(
       conn = con,
-      name = "dly_core",
+      name = table_name,
       value = data,
       overwrite = FALSE,
       append = TRUE
@@ -58,12 +68,12 @@ db_write_dly <- function(files, file_db, chunk_size = 100) {
 #' @param vars Variables in data to query (select).
 #' @return Data frame.
 #' @export
-db_read_dly <- function(file_db, ids, vars) {
+ghcn_db_read <- function(file_db, ids, vars) {
   if (!is.character(ids)) {
-    stop("ids must be a character vector", call. = FALSE)
+    stop("`ids` must be a character vector", call. = FALSE)
   }
   if (!is.character(vars)) {
-    stop("vars must be a character vector", call. = FALSE)
+    stop("`vars` must be a character vector", call. = FALSE)
   }
 
   id <- NULL

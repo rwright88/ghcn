@@ -5,33 +5,32 @@
 #' fall, snow depth, minimum temperature, and maximum temperature. Removes flag
 #' variables. Also makes units of measurement consistent across variables.
 #'
-#' @param data Data frame of dly data read with `read_dly()`.
-#' @return Data frame.
+#' @param data Data frame of dly data read with `ghcn_read_dly()`.
+#' @return Data frame of dly data.
 #' @export
-clean_dly <- function(data) {
+ghcn_clean <- function(data) {
   if (!is.data.frame(data)) {
-    stop("data must be a data frame.", call. = FALSE)
+    stop("`data` must be a data frame.", call. = FALSE)
+  }
+
+  vals <- paste0("value", 1:31)
+  vars <- c("id", "year", "month", "element", vals)
+
+  if (!all(vars %in% names(data))) {
+    stop("`data` does not have the required variables.", call. = FALSE)
   }
 
   core <- c("PRCP", "SNOW", "SNWD", "TMAX", "TMIN")
 
-  data <- data %>%
-    dplyr::select(c("id", "year", "month", "element"), dplyr::starts_with("value")) %>%
-    dplyr::filter(.data$element %in% core) %>%
-    tidyr::gather("day", "value", 5:35) %>%
-    dplyr::mutate(date = lubridate::make_date(
-      year = .data$year,
-      month = .data$month,
-      day = text_extract(.data$day, "\\d+", perl = TRUE))
-    ) %>%
-    dplyr::select(c("id", "date", "element", "value"))
-
-  data <- data %>%
-    dplyr::filter(!is.na(.data$date)) %>%
-    dplyr::mutate(value = clean_dly_vals(.data$value, .data$element)) %>%
-    tidyr::spread(.data$element, .data$value) %>%
-    dplyr::rename_all(tolower)
-
+  data <- data[vars]
+  data <- data[data$element %in% core, ]
+  data <- tidyr::gather(data, "day", "value", vals)
+  data$date <- lubridate::make_date(data$year, data$month, text_extract(data$day, "\\d+", perl = TRUE))
+  data <- data[c("id", "date", "element", "value")]
+  data <- data[!is.na(data$date), ]
+  data$value <- ghcn_clean_vals(data$value, element = data$element)
+  data <- tidyr::spread(data, "element", "value")
+  data <- setNames(data, tolower(names(data)))
   data
 }
 
@@ -45,9 +44,9 @@ clean_dly <- function(data) {
 #'   element type for precipitation.
 #' @return Vector of type double.
 #' @export
-clean_dly_vals <- function(x, element) {
+ghcn_clean_vals <- function(x, element) {
   if (length(x) != length(element)) {
-    stop("x and element must have equal lengths.", call. = FALSE)
+    stop("`x` and `element` must have equal lengths.", call. = FALSE)
   }
   x[element == "PRCP"] <- x[element == "PRCP"] / 10
   x[element == "TMAX"] <- x[element == "TMAX"] / 10
