@@ -28,8 +28,9 @@ ghcn_db_write <- function(files, file_db, table_name, batch_size = 100) {
   if (file.exists(file_db)) {
     file.remove(file_db)
   }
-
   con <- DBI::dbConnect(RSQLite::SQLite(), file_db)
+  on.exit(DBI::dbDisconnect(con))
+
   n_batches <- ceiling(n_files / batch_size)
   vars_all <- c("id", "date", "prcp", "snow", "snwd", "tmax", "tmin")
 
@@ -58,7 +59,6 @@ ghcn_db_write <- function(files, file_db, table_name, batch_size = 100) {
   }
 
   DBI::dbExecute(con, statement = "CREATE INDEX idx1 ON dly_core(id)")
-  DBI::dbDisconnect(con)
 }
 
 #' Read database dly table.
@@ -69,16 +69,12 @@ ghcn_db_write <- function(files, file_db, table_name, batch_size = 100) {
 #' @return Data frame.
 #' @export
 ghcn_db_read <- function(file_db, ids, vars) {
-  if (!is.character(ids)) {
-    stop("`ids` must be a character vector", call. = FALSE)
-  }
-  if (!is.character(vars)) {
-    stop("`vars` must be a character vector", call. = FALSE)
-  }
+  stopifnot(is.character(ids), is.character(vars))
 
   id <- NULL
 
   con <- DBI::dbConnect(RSQLite::SQLite(), file_db)
+  on.exit(DBI::dbDisconnect(con))
 
   data <- con %>%
     dplyr::tbl("dly_core") %>%
@@ -90,6 +86,5 @@ ghcn_db_read <- function(file_db, ids, vars) {
     data[["date"]] <- lubridate::as_date(data[["date"]])
   }
 
-  DBI::dbDisconnect(con)
   data
 }
