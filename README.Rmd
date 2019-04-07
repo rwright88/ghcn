@@ -41,10 +41,6 @@ Transform the data into an easier to use format:
 ghcn_clean(dat)
 ```
 
-Create database:
-
-TODO
-
 ## Data source
 
 NOAA [GHCN](https://www.ncdc.noaa.gov/ghcn-daily-description).

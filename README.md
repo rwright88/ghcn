@@ -45,7 +45,7 @@ dat <- ghcn_read(id = "USW00094728")
 dat[1:8]
 ```
 
-    #> # A tibble: 14,988 x 8
+    #> # A tibble: 15,006 x 8
     #>    id           year month element value1 mflag1 qflag1 sflag1
     #>    <chr>       <int> <int> <chr>    <int> <chr>  <chr>  <chr> 
     #>  1 USW00094728  1869     1 TMAX       -17 <NA>   <NA>   Z     
@@ -58,7 +58,7 @@ dat[1:8]
     #>  8 USW00094728  1869     2 SNOW         0 <NA>   <NA>   Z     
     #>  9 USW00094728  1869     3 TMAX       -33 <NA>   <NA>   Z     
     #> 10 USW00094728  1869     3 TMIN      -156 <NA>   <NA>   Z     
-    #> # ... with 14,978 more rows
+    #> # ... with 14,996 more rows
 
 Transform the data into an easier to use format:
 
@@ -66,7 +66,7 @@ Transform the data into an easier to use format:
 ghcn_clean(dat)
 ```
 
-    #> # A tibble: 54,876 x 7
+    #> # A tibble: 54,906 x 7
     #>    id          date        prcp  snow  snwd  tmax  tmin
     #>    <chr>       <date>     <dbl> <dbl> <dbl> <dbl> <dbl>
     #>  1 USW00094728 1869-01-01  19.1   229    NA  -1.7  -7.2
@@ -79,11 +79,7 @@ ghcn_clean(dat)
     #>  8 USW00094728 1869-01-08   0       0    NA  12.2   4.4
     #>  9 USW00094728 1869-01-09   0       0    NA   8.9   3.3
     #> 10 USW00094728 1869-01-10   0.3     0    NA   6.7   0.6
-    #> # ... with 54,866 more rows
-
-Create database:
-
-TODO
+    #> # ... with 54,896 more rows
 
 Data source
 -----------

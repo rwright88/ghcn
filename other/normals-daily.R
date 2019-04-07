@@ -6,8 +6,10 @@ library(lubridate)
 library(ghcn)
 
 ids <- c(
-  "Allentown" = "USW00014737",
-  "Richmond"  = "USW00013740"
+  "Allentown"  = "USW00014737",
+  "Harrisburg" = "USW00014711",
+  "Richmond"   = "USW00013740",
+  "San Diego"  = "USW00023188"
 )
 
 year_min  <- 1981
@@ -34,19 +36,26 @@ normal_day <- function(x, min_years) {
 }
 
 model_day <- function(x, day) {
-  predict(loess(x ~ day, span = 0.3))
+  if (anyNA(x)) {
+    return(NA)
+  } else {
+    predict(loess(x ~ day, span = 0.3))
+  }
 }
 
 calc_normals <- function(data, year_min, year_max, min_years) {
-  day_nums <- data %>%
+  data <- data %>%
     mutate(year = year(date)) %>%
     filter(year %in% year_min:year_max, !(month(date) == 2 & day(date) == 29)) %>%
     arrange(id, date) %>%
     group_by(id, year) %>%
-    mutate(day_num = row_number(date)) %>%
+    mutate(day_num = yday(date)) %>%
     ungroup()
 
-  normals <- day_nums %>%
+  leap <- (leap_year(data$date) & (month(data$date) > 2))
+  data$day_num[leap] <- data$day_num[leap] - 1
+
+  normals <- data %>%
     group_by(id, day_num) %>%
     summarise_at(c("tmin", "tmax"), ~ normal_day(.x, min_years = min_years)) %>%
     ungroup()
@@ -81,8 +90,8 @@ plot_daily <- function(data) {
 
 dat <- get_data(ids)
 
-normals <- calc_normals(dat, year_min = year_min, year_max = year_max, min_years = 30)
+normals <- calc_normals(dat, year_min = year_min, year_max = year_max, min_years = 20)
 
-normals[normals[["day_num"]] %in% 54:56, ]
-
-plot_daily(normals)
+normals %>%
+  filter(id == "Allentown") %>%
+  plot_daily()
