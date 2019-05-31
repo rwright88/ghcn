@@ -6,6 +6,12 @@
 Tools for working with [Global Historical Climatology
 Network](https://www.ncdc.noaa.gov/ghcn-daily-description) (GHCN) data.
 
+## Installation
+
+``` r
+devtools::install_github("rwright88/ghcn")
+```
+
 ## Examples
 
 Find a station based on a matching pattern:
