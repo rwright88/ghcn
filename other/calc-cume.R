@@ -76,13 +76,13 @@ plot_cume <- function(data) {
     geom_line(
       data = filter(data, season_start == "mean"),
       mapping = aes(day_num, snow_cume),
-      size = 1.1,
+      size = 1,
       color = "#E41A1C"
     ) +
     geom_line(
       data = filter(data, season_start == "2018"),
       mapping = aes(day_num, snow_cume),
-      size = 1.1,
+      size = 1,
       color = "#377EB8"
     ) +
     labs(

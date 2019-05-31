@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 # ghcn
 
-Tools for working with Global Historical Climatology Network (GHCN) data.
+Tools for working with [Global Historical Climatology Network](https://www.ncdc.noaa.gov/ghcn-daily-description) (GHCN) data.
 
 ## Examples
 
@@ -32,15 +32,11 @@ Read all daily data for one station, given the station ID:
 
 ```{r}
 dat <- ghcn_read(id = "USW00094728")
-dat[1:8]
+str(dat[1:20])
 ```
 
-Transform the data into an easier to use format:
+Transform the data into an easier to use format, keeping only the five core statistics of daily precipitation, snow fall, snow depth, minimum temperature, and maximum temperature:
 
 ```{r}
 ghcn_clean(dat)
 ```
-
-## Data source
-
-NOAA [GHCN](https://www.ncdc.noaa.gov/ghcn-daily-description).
