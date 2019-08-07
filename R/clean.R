@@ -9,9 +9,7 @@
 #' @return Data frame of dly data.
 #' @export
 ghcn_clean <- function(data) {
-  if (!is.data.frame(data)) {
-    stop("`data` must be a data frame.", call. = FALSE)
-  }
+  stopifnot(is.data.frame(data))
 
   vals <- paste0("value", 1:31)
   vars <- c("id", "year", "month", "element", vals)
@@ -24,13 +22,13 @@ ghcn_clean <- function(data) {
 
   data <- data[vars]
   data <- data[data$element %in% core, ]
-  data <- tidyr::gather(data, "day", "value", vals)
+  data <- tidyr::gather(data, "day", "value", !!vals)
   data$date <- lubridate::make_date(data$year, data$month, text_extract(data$day, "\\d+", perl = TRUE))
-  data <- data[c("id", "date", "element", "value")]
+  data <- data[, c("id", "date", "element", "value")]
   data <- data[!is.na(data$date), ]
   data$value <- ghcn_clean_vals(data$value, element = data$element)
   data <- tidyr::spread(data, "element", "value")
-  data <- setNames(data, tolower(names(data)))
+  names(data) <- tolower(names(data))
   data
 }
 

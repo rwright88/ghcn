@@ -52,7 +52,7 @@ dat <- ghcn_read(id = "USW00094728")
 str(dat[1:20])
 ```
 
-    #> Classes 'tbl_df', 'tbl' and 'data.frame':    15021 obs. of  20 variables:
+    #> Classes 'tbl_df', 'tbl' and 'data.frame':    15060 obs. of  20 variables:
     #>  $ id     : chr  "USW00094728" "USW00094728" "USW00094728" "USW00094728" ...
     #>  $ year   : int  1869 1869 1869 1869 1869 1869 1869 1869 1869 1869 ...
     #>  $ month  : int  1 1 1 1 2 2 2 2 3 3 ...
@@ -82,7 +82,7 @@ temperature, and maximum temperature:
 ghcn_clean(dat)
 ```
 
-    #> # A tibble: 54,937 x 7
+    #> # A tibble: 55,029 x 7
     #>    id          date        prcp  snow  snwd  tmax  tmin
     #>    <chr>       <date>     <dbl> <dbl> <dbl> <dbl> <dbl>
     #>  1 USW00094728 1869-01-01  19.1   229    NA  -1.7  -7.2
@@ -95,4 +95,4 @@ ghcn_clean(dat)
     #>  8 USW00094728 1869-01-08   0       0    NA  12.2   4.4
     #>  9 USW00094728 1869-01-09   0       0    NA   8.9   3.3
     #> 10 USW00094728 1869-01-10   0.3     0    NA   6.7   0.6
-    #> # ... with 54,927 more rows
+    #> # ... with 55,019 more rows

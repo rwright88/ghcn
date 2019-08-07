@@ -4,10 +4,7 @@
 #' @return Data frame of station data.
 #' @export
 ghcn_find_stations <- function(pattern) {
-  if (length(pattern) != 1) {
-    stop("`Pattern` must have length of 1.", call. = FALSE)
-  }
+  stopifnot(length(pattern) == 1)
   out <- ghcn_read_stations()
-  out <- out[grepl(pattern, out$name, ignore.case = TRUE, perl = TRUE), ]
-  out
+  out[grepl(pattern, out$name, ignore.case = TRUE, perl = TRUE), ]
 }
