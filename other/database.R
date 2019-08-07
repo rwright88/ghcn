@@ -76,11 +76,10 @@ ghcn_db_read <- function(file_db, ids, vars) {
   con <- DBI::dbConnect(RSQLite::SQLite(), file_db)
   on.exit(DBI::dbDisconnect(con))
 
-  data <- con %>%
-    dplyr::tbl("dly_core") %>%
-    dplyr::filter(id %in% ids) %>%
-    dplyr::select(vars) %>%
-    dplyr::collect()
+  data <- dplyr::tbl(con, "dly_core")
+  data <- dplyr::filter(data, id %in% ids)
+  data <- dplyr::select(data, vars)
+  data <- dplyr::collect(data)
 
   if ("date" %in% names(data)) {
     data[["date"]] <- lubridate::as_date(data[["date"]])

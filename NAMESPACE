@@ -2,13 +2,7 @@
 
 export(ghcn_clean)
 export(ghcn_clean_vals)
-export(ghcn_db_read)
-export(ghcn_db_write)
 export(ghcn_find_stations)
 export(ghcn_read)
 export(ghcn_read_file)
 export(ghcn_read_stations)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,.data)
-importFrom(dplyr,sym)
-importFrom(dplyr,syms)
